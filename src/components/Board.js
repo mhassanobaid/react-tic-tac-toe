@@ -15,7 +15,12 @@ export default function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
-  const winner = calculateWinner(squares);
+  const result = calculateWinner(squares);
+  const winner = result?.winner;
+  const winningLine = result?.line ?? [];
+
+  const isDraw = !winner && squares.every(Boolean);
+
   const boardSize = 3;
   const boardRows = [];
 
@@ -28,6 +33,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
           key={index}
           value={squares[index]}
           onSquareClick={() => handleClick(index)}
+          isHighlighted={winningLine.includes(index)}
         />
       );
     }
@@ -41,7 +47,7 @@ export default function Board({ xIsNext, squares, onPlay }) {
   return (
     <>
       <div className="status">
-        <Status winner={winner} xIsNext={xIsNext} />
+        <Status winner={winner} xIsNext={xIsNext} isDraw={isDraw} />
       </div>
       {boardRows}
     </>
